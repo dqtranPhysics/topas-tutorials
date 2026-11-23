@@ -5,3 +5,4 @@ params/*.png
 *.png
 __pycache__/
 instructor/
+slides/

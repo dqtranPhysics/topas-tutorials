@@ -1,0 +1,8 @@
+# Day 1, Step 2: fire a FEW protons and watch the tracks.
+# Run:  topas day1_step2_beam.txt
+# Red = protons, yellow = electrons, green = gammas, grey = neutrons.
+includeFile = visualization.txt
+
+i:So/Beam/NumberOfHistoriesInRun = 20
+b:Ge/DoseMap/Invisible  = "True"
+b:Ge/Detector/Invisible = "True"

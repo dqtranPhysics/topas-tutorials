@@ -1,0 +1,83 @@
+# =====================================================================
+# Day 1, Step 4: the Qt "playground"  --  a complete simulation in ONE file
+# Run:  topas day1_step4_gui_playground.txt
+#
+# Parameters whose type has a "c" (dc:, sc:, uc:, ic:, bc:) are CHANGEABLE:
+# they appear in the Qt window's "Parameter Control" tab. Change a value
+# there, then press the Run button at the top of that tab to fire NumberOfHistoriesInRun protons with the new setting.
+# (TOPAS requires a parameter to be marked changeable where it is FIRST
+#  defined, which is why this file does not reuse geometry.txt/beam.txt.)
+# =====================================================================
+includeFile = physics_and_run.txt
+
+# ---------- Geometry ----------
+s:Ge/World/Material  = "G4_AIR"
+d:Ge/World/HLX       = 50. cm
+d:Ge/World/HLY       = 50. cm
+d:Ge/World/HLZ       = 50. cm
+b:Ge/World/Invisible = "True"
+
+s:Ge/Phantom/Type          = "TsBox"
+s:Ge/Phantom/Parent        = "World"
+sc:Ge/Phantom/Material     = "G4_WATER"
+dc:Ge/Phantom/HLX          = 10. cm
+dc:Ge/Phantom/HLY          = 10. cm
+dc:Ge/Phantom/HLZ          = 15. cm
+dc:Ge/Phantom/TransZ       = 0. cm
+sc:Ge/Phantom/Color        = "skyblue"
+s:Ge/Phantom/DrawingStyle  = "WireFrame"
+
+# A slab inside the phantom you can switch on and change
+bc:Ge/Slab/Include      = "False"
+s:Ge/Slab/Type          = "TsBox"
+s:Ge/Slab/Parent        = "Phantom"
+sc:Ge/Slab/Material     = "G4_BONE_COMPACT_ICRU"
+dc:Ge/Slab/HLX          = 10. cm
+dc:Ge/Slab/HLY          = 10. cm
+dc:Ge/Slab/HLZ          = 1. cm
+dc:Ge/Slab/TransX       = 0. cm
+dc:Ge/Slab/TransZ       = 11. cm
+s:Ge/Slab/Color         = "orange"
+
+# ---------- Beam ----------
+s:Ge/BeamPosition/Parent = "World"
+s:Ge/BeamPosition/Type   = "Group"
+d:Ge/BeamPosition/TransX = 0. cm
+d:Ge/BeamPosition/TransY  = 0. cm
+d:Ge/BeamPosition/TransZ = 20. cm
+d:Ge/BeamPosition/RotX    = 180. deg
+d:Ge/BeamPosition/RotY   = 0. deg
+d:Ge/BeamPosition/RotZ    = 0. deg
+
+s:So/Beam/Type                     = "Beam"
+s:So/Beam/Component                = "BeamPosition"
+sc:So/Beam/BeamParticle            = "proton"     # try "e-", "gamma", "alpha", "neutron"
+dc:So/Beam/BeamEnergy              = 150. MeV
+uc:So/Beam/BeamEnergySpread        = 0.5
+s:So/Beam/BeamPositionDistribution = "Gaussian"
+s:So/Beam/BeamPositionCutoffShape  = "Ellipse"
+d:So/Beam/BeamPositionCutoffX      = 2. cm
+d:So/Beam/BeamPositionCutoffY      = 2. cm
+dc:So/Beam/BeamPositionSpreadX     = 4. mm
+dc:So/Beam/BeamPositionSpreadY     = 4. mm
+s:So/Beam/BeamAngularDistribution  = "None"
+ic:So/Beam/NumberOfHistoriesInRun  = 10
+
+# ---------- Graphics ----------
+b:Gr/Enable  = "True"
+b:Ts/UseQt   = "True"
+s:Gr/ViewA/Type   = "OpenGL"
+i:Gr/ViewA/WindowSizeX = 1000
+i:Gr/ViewA/WindowSizeY = 800
+d:Gr/ViewA/Theta  = 90 deg
+d:Gr/ViewA/Phi    = 0 deg
+u:Gr/ViewA/Zoom   = 1.5
+b:Gr/ViewA/IncludeAxes = "True"
+d:Gr/ViewA/AxesSize    = 5 cm
+b:Gr/ViewA/HiddenLineRemovalForTrajectories = "True"
+s:Gr/ViewA/ColorBy = "ParticleType"
+sv:Gr/ViewA/ColorByParticleTypeNames  = 4 "proton" "e-" "gamma" "neutron"
+sv:Gr/ViewA/ColorByParticleTypeColors = 4 "red" "yellow" "green" "grey"
+i:Ts/NumberOfThreads = 1
+i:Ts/ShowHistoryCountAtInterval = 10
+b:Ts/PauseBeforeQuit = "True"

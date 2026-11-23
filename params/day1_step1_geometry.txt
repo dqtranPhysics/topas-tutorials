@@ -1,0 +1,9 @@
+# Day 1, Step 1: look at the GEOMETRY only.
+# Run:  topas day1_step1_geometry.txt
+# The beam fires 0 protons and the scoring volumes are hidden,
+# so you only see the world axes and the water phantom.
+includeFile = visualization.txt
+
+i:So/Beam/NumberOfHistoriesInRun = 0
+b:Ge/DoseMap/Invisible  = "True"
+b:Ge/Detector/Invisible = "True"

@@ -1,0 +1,11 @@
+# =====================================================================
+# main.txt  --  the full simulation, run WITHOUT graphics ("batch mode")
+#
+#   Run from this folder:   topas main.txt
+#   Output:                 DoseMap.csv  and  DetectorDose.csv
+#
+# File chain:  physics_and_run.txt <- geometry.txt <- beam.txt <- scoring.txt <- main.txt
+# A file may OVERRIDE any parameter from the files it includes. All Day-2
+# experiments work this way: include main.txt, then change one thing.
+# =====================================================================
+includeFile = scoring.txt

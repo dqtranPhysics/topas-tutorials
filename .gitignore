@@ -1,0 +1,7 @@
+# outputs students generate
+runs/
+params/*.csv
+params/*.png
+*.png
+__pycache__/
+instructor/

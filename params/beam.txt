@@ -1,0 +1,40 @@
+# =====================================================================
+# beam.txt  --  WHERE particles come from (the "source")
+# =====================================================================
+
+# Builds on: geometry.txt
+includeFile = geometry.txt
+
+# --- BeamPosition is a built-in TOPAS "Group" component that only marks
+# a position and orientation. The beam is emitted from its origin.
+# We place it 5 cm upstream of the phantom surface (z = +20 cm) and
+# rotate it 180 deg about X so the beam points along -Z (into the phantom).
+s:Ge/BeamPosition/Parent = "World"
+s:Ge/BeamPosition/Type   = "Group"
+d:Ge/BeamPosition/TransX = 0. cm
+d:Ge/BeamPosition/TransY = 0. cm
+d:Ge/BeamPosition/TransZ = 20. cm
+d:Ge/BeamPosition/RotX   = 180. deg
+d:Ge/BeamPosition/RotY   = 0. deg
+d:Ge/BeamPosition/RotZ   = 0. deg
+
+# --- The proton pencil beam
+s:So/Beam/Type                     = "Beam"
+s:So/Beam/Component                = "BeamPosition"
+s:So/Beam/BeamParticle             = "proton"
+d:So/Beam/BeamEnergy               = 150. MeV   # range in water ~ 15.8 cm
+u:So/Beam/BeamEnergySpread         = 0.5        # in PERCENT of BeamEnergy (1 sigma)
+
+# Lateral spot shape: Gaussian, sigma = 4 mm, cut off at 2 cm radius
+s:So/Beam/BeamPositionDistribution = "Gaussian"
+s:So/Beam/BeamPositionCutoffShape  = "Ellipse"
+d:So/Beam/BeamPositionCutoffX      = 2. cm
+d:So/Beam/BeamPositionCutoffY      = 2. cm
+d:So/Beam/BeamPositionSpreadX      = 4. mm
+d:So/Beam/BeamPositionSpreadY      = 4. mm
+
+# Angular divergence: none (a perfectly parallel beam)
+s:So/Beam/BeamAngularDistribution  = "None"
+
+# How many protons ("histories") to simulate. Kept low for laptops.
+i:So/Beam/NumberOfHistoriesInRun   = 10000

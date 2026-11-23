@@ -1,0 +1,54 @@
+# =====================================================================
+# geometry.txt  --  WHAT the particles travel through
+# ---------------------------------------------------------------------
+# Every TOPAS parameter line has the form
+#     type:Category/Name/Property = value [unit]
+# type:  d = dimensioned number (needs a unit), u = unitless number,
+#        i = integer, b = boolean, s = string,  "v" suffix = vector.
+# Category Ge = geometry, So = source, Sc = scoring, Ph = physics,
+#          Gr = graphics, Ts = TOPAS run settings.
+#
+# Coordinate system used in ALL tutorials:
+#   * Beam travels along -Z (TOPAS default), centred on x = y = 0.
+#   * The phantom's upstream (entrance) surface is at z = +15 cm.
+#   * Depth in water = 15 cm - z.
+# =====================================================================
+
+# Builds on: physics_and_run.txt  (TOPAS files form a chain: each file
+# includes the previous one and may override its parameters)
+includeFile = physics_and_run.txt
+
+# --- The World: the outermost volume; particles leaving it are killed.
+s:Ge/World/Material  = "G4_AIR"
+d:Ge/World/HLX       = 50. cm        # HL = HALF-length, so the world is 1 m wide
+d:Ge/World/HLY       = 50. cm
+d:Ge/World/HLZ       = 50. cm
+b:Ge/World/Invisible = "True"
+
+# --- The water phantom: a 20 x 20 x 30 cm box of water.
+s:Ge/Phantom/Type     = "TsBox"
+s:Ge/Phantom/Parent   = "World"
+s:Ge/Phantom/Material = "G4_WATER"
+d:Ge/Phantom/HLX      = 10. cm
+d:Ge/Phantom/HLY      = 10. cm
+d:Ge/Phantom/HLZ      = 15. cm
+d:Ge/Phantom/TransX   = 0. cm
+d:Ge/Phantom/TransY   = 0. cm
+d:Ge/Phantom/TransZ   = 0. cm
+s:Ge/Phantom/Color    = "skyblue"
+s:Ge/Phantom/DrawingStyle = "WireFrame"
+
+# --- Optional heterogeneity slab (used on Day 2, experiment D).
+# A 2 cm slab of another material placed INSIDE the phantom, covering the
+# whole field, between depths 3 and 5 cm. Switched off by default.
+# (Challenge: make it cover only x > 0 by setting HLX = 5 cm, TransX = 5 cm.)
+b:Ge/Slab/Include      = "False"
+s:Ge/Slab/Type         = "TsBox"
+s:Ge/Slab/Parent       = "Phantom"
+s:Ge/Slab/Material     = "G4_BONE_COMPACT_ICRU"
+d:Ge/Slab/HLX          = 10. cm      # full width of the phantom
+d:Ge/Slab/HLY          = 10. cm
+d:Ge/Slab/HLZ          = 1. cm       # 2 cm thick
+d:Ge/Slab/TransX       = 0. cm
+d:Ge/Slab/TransZ       = 11. cm      # centre at depth 4 cm (15 - 11), spans depth 3-5 cm
+s:Ge/Slab/Color        = "orange"

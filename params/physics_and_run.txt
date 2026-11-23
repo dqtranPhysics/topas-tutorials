@@ -1,0 +1,25 @@
+# =====================================================================
+# physics_and_run.txt  --  HOW particles interact, and run settings
+# =====================================================================
+
+# --- Physics: the TOPAS default modular physics list (good for proton therapy).
+#   g4em-standard_opt4    : accurate electromagnetic physics
+#   g4h-phy_QGSP_BIC_HP   : hadronic (nuclear) interactions of protons/neutrons
+#   g4decay, g4ion-binarycascade, g4h-elastic_HP, g4stopping : the rest
+s:Ph/ListName = "Default"
+sv:Ph/Default/Modules = 6 "g4em-standard_opt4" "g4h-phy_QGSP_BIC_HP" "g4decay" "g4ion-binarycascade" "g4h-elastic_HP" "g4stopping"
+
+# --- Random number seed. Same seed + same input = identical result.
+i:Ts/Seed = 1
+
+# --- Use all CPU cores (0 = auto). visualization.txt overrides this to 1.
+i:Ts/NumberOfThreads = 0
+
+# --- Progress messages and quieter output
+i:Ts/ShowHistoryCountAtInterval = 2000
+i:Ts/TrackingVerbosity          = 0
+i:Ts/EventVerbosity             = 0
+i:Ts/RunVerbosity               = 0
+
+# --- Graphics OFF by default (visualization.txt turns it on)
+b:Gr/Enable = "False"

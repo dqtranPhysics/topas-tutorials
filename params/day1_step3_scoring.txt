@@ -1,0 +1,6 @@
+# Day 1, Step 3: show the SCORING volumes too
+# (green wire-frame = dose-map slab, red cube = point detector).
+# Run:  topas day1_step3_scoring.txt
+includeFile = visualization.txt
+
+i:So/Beam/NumberOfHistoriesInRun = 20

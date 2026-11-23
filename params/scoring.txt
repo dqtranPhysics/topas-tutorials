@@ -1,0 +1,66 @@
+# =====================================================================
+# scoring.txt  --  WHAT we measure and WHERE
+# ---------------------------------------------------------------------
+# Two "detectors":
+#   1. DoseMap  : a thin slab through the beam axis (the x-z plane),
+#                 divided into 2 mm (x) by 2 mm (z) bins. From it we
+#                 extract on-axis and off-axis depth-dose curves and
+#                 lateral profiles at any depth.
+#   2. Detector : a single 1 cm water cube, like a small ion chamber,
+#                 that you can move around (Day 2, experiment C).
+# =====================================================================
+
+# Builds on: beam.txt
+includeFile = beam.txt
+
+# --- 1. The dose-map slab -------------------------------------------
+# IsParallel = True puts it in a "parallel world": it is a scoring grid
+# only and does NOT change the physics (the material is still the
+# phantom's water). This lets it overlap other volumes safely.
+s:Ge/DoseMap/Type       = "TsBox"
+s:Ge/DoseMap/Parent     = "Phantom"
+b:Ge/DoseMap/IsParallel = "True"
+d:Ge/DoseMap/HLX        = 7.7 cm     # 77 bins x 2 mm = 15.4 cm wide; odd number -> centre bin on axis
+d:Ge/DoseMap/HLY        = 0.5 cm     # 1 cm thick in y
+d:Ge/DoseMap/HLZ        = 15. cm     # full phantom depth
+i:Ge/DoseMap/XBins      = 77
+i:Ge/DoseMap/YBins      = 1
+i:Ge/DoseMap/ZBins      = 150        # 30 cm / 150 = 2 mm per bin
+# Flip the slab so that z-bin 0 is at the phantom ENTRANCE (depth 0).
+d:Ge/DoseMap/RotX       = 180. deg
+s:Ge/DoseMap/Color      = "green"
+s:Ge/DoseMap/DrawingStyle = "WireFrame"
+
+s:Sc/DoseMap/Quantity                  = "DoseToMedium"
+s:Sc/DoseMap/Component                 = "DoseMap"
+s:Sc/DoseMap/OutputType                = "csv"
+s:Sc/DoseMap/OutputFile                = "DoseMap"
+s:Sc/DoseMap/IfOutputFileAlreadyExists = "Overwrite"
+# Sum  = total dose (Gy) from all protons in the run
+# Mean = Sum / number of protons  -> dose per proton (Gy/proton)
+# Standard_Deviation = spread of the per-proton dose contributions.
+#   The uncertainty of the Mean is Standard_Deviation / sqrt(N);
+#   the analysis scripts compute this for you.
+sv:Sc/DoseMap/Report                   = 3 "Sum" "Mean" "Standard_Deviation"
+
+# --- 2. The movable point detector ----------------------------------
+# A real 1 cm water cube placed inside the phantom (mass world).
+# Move it by changing Depth and TransX.
+d:Ge/Detector/Depth     = 10. cm                        # our own helper parameter
+s:Ge/Detector/Type      = "TsBox"
+s:Ge/Detector/Parent    = "Phantom"
+s:Ge/Detector/Material  = "G4_WATER"
+d:Ge/Detector/HLX       = 0.5 cm
+d:Ge/Detector/HLY       = 0.5 cm
+d:Ge/Detector/HLZ       = 0.5 cm
+d:Ge/Detector/TransX    = 0. cm                         # off-axis distance
+d:Ge/Detector/TransY    = 0. cm
+d:Ge/Detector/TransZ    = Ge/Phantom/HLZ - Ge/Detector/Depth cm
+s:Ge/Detector/Color     = "red"
+
+s:Sc/DetectorDose/Quantity                  = "DoseToMedium"
+s:Sc/DetectorDose/Component                 = "Detector"
+s:Sc/DetectorDose/OutputType                = "csv"
+s:Sc/DetectorDose/OutputFile                = "DetectorDose"
+s:Sc/DetectorDose/IfOutputFileAlreadyExists = "Overwrite"
+sv:Sc/DetectorDose/Report                   = 3 "Sum" "Mean" "Standard_Deviation"
